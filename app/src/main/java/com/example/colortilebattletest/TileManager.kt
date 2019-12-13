@@ -1,8 +1,6 @@
 package com.example.colortilebattletest
 
-import android.graphics.Canvas
-import android.graphics.Point
-import android.graphics.PointF
+import android.graphics.*
 import java.util.*
 
 class TileManager {
@@ -48,6 +46,28 @@ class TileManager {
     }
 
     fun draw(canvas: Canvas) {
+        // TODO: 背景も別クラスにする
+        val paint = Paint()
+
+        for (idxY in 0..boardSize.y + 4) {
+            for (idxX in 0..boardSize.x + 4) {
+                if ((idxX + idxY) % 2 == 0) {
+                    paint.color = Color.parseColor("#eeeeee")
+                } else {
+                    paint.color = Color.parseColor("#ffffff")
+                }
+                val pointF = toWorldPoint(PointF(idxX * tileSize - tileSize * 2, idxY * tileSize - tileSize * 2))
+                canvas.drawRect(
+                    pointF.x,
+                    pointF.y,
+                    pointF.x + tileSize,
+                    pointF.y + tileSize,
+                    paint)
+            }
+        }
+
+
+
         for (y in tiles.indices) {
             for (x in tiles[y].indices) {
                 if (!tiles[y][x].isExists) continue
@@ -58,8 +78,10 @@ class TileManager {
 
     fun onTouch(p: PointF) {
         val index = toArrayIndex(toLocalPoint(p))
-        crossLineChecker(tiles, index.x, index.y, boardSize.x, boardSize.y)
-        println(tiles)
+        println(index)
+        index?.let {
+            crossLineChecker(tiles, it.x, it.y, boardSize.x, boardSize.y)
+        }
     }
 
     fun toWorldPoint(p: PointF): PointF {
@@ -70,9 +92,10 @@ class TileManager {
         return PointF(p.x - boardPosition.x, p.y - boardPosition.y)
     }
 
-    fun toArrayIndex(p: PointF): Point {
+    fun toArrayIndex(p: PointF): Point? {
         val x = Math.floor((p.x / tileSize).toDouble()).toInt()
         val y = Math.floor((p.y / tileSize).toDouble()).toInt()
+        if (x >= boardSize.x || y >= boardSize.y || x < 0 || y < 0) return null
         return Point(x, y)
     }
 
@@ -85,6 +108,7 @@ class TileManager {
         lineChecker(tileMap, x, y, 0, 1, maxX, maxY, checkMap)
         lineChecker(tileMap, x, y, 0, -1, maxX, maxY, checkMap)
 
+        // TODO: 探索結果の処理は別関数で
         // checkMapから存在しているタイルを計算
         val tilesExists = mutableListOf<Tile>()
         for ((idxY, y) in checkMap.withIndex()) {

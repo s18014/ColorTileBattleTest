@@ -35,7 +35,6 @@ class DragAnimation {
         if (time > endTime) isExists = false
         val ratio = time / endTime.toFloat()
         pointF = PointF(fromPointF.x * (1 - ratio) + toPointF.x * ratio, fromPointF.y * (1 - ratio) + toPointF.y * ratio)
-        println(pointF)
     }
 
     fun getDirection(p1: PointF, p2: PointF): PointF {
