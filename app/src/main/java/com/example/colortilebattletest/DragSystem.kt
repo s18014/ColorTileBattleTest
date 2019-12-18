@@ -4,7 +4,10 @@ import android.graphics.Canvas
 import android.graphics.PointF
 
 class DragSystem {
-    private val SIZE = 16
+    companion object {
+        const val SIZE = 100
+    }
+
     private val animations: Array<DragAnimation> = Array(SIZE, { it -> DragAnimation() })
 
     fun init() {
@@ -17,11 +20,11 @@ class DragSystem {
         }
     }
 
-    fun add(from: PointF, to: PointF) {
+    fun add(from: PointF, to: PointF, size: Float, type: Tile.Type) {
         for (i in animations.indices) {
             if (!animations[i].isExists) {
                 animations[i].isExists = true
-                animations[i].init(from, to)
+                animations[i].init(from, to, size, type)
                 return
             }
         }

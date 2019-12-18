@@ -5,7 +5,9 @@ import android.graphics.Color
 import android.graphics.Paint
 
 class Tile {
-    val PAD = 5f
+    companion object {
+        const val PADDING = 5f
+    }
 
     var isExists = false
     var type = Type.NONE
@@ -38,6 +40,13 @@ class Tile {
             Type.BLUE -> paint.color = Color.parseColor("#5555ee")
             else -> return
         }
-        canvas.drawRoundRect(left + PAD, top + PAD, right - PAD, bottom - PAD, 10f, 10f, paint)
+        canvas.drawRoundRect(left + PADDING, top + PADDING, right - PADDING, bottom - PADDING, 10f, 10f, paint)
+    }
+
+    fun move(left: Float, top: Float, right: Float, bottom: Float) {
+        this.left = left
+        this.top = top
+        this.right = right
+        this.bottom = bottom
     }
 }
