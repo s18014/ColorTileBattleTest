@@ -227,7 +227,7 @@ class TileManager {
                     print("$idxX, ")
                 }
                 println()
+            }
         }
     }
-}
 }
